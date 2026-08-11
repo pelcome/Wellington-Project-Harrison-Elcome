@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windy Wellington | A Capital Kind of City</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --harbour-deep:#0B3D5C;
+    --harbour-ink:#07293D;
+    --strait-teal:#1C7293;
+    --ferry-orange:#F1642E;
+    --sunrise-gold:#FFB238;
+    --foam:#F4FAF9;
+    --foam-dim:#E4EEEC;
+    --line: rgba(244,250,249,0.16);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--foam);
+    color:var(--harbour-ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Fredoka',sans-serif; font-weight:600; letter-spacing:-0.01em;}
+  .mono{font-family:'Space Mono',monospace;}
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  section{position:relative;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,61,92,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:14px 28px;}
+  .brand{display:flex; align-items:center; gap:10px; color:var(--foam); font-family:'Fredoka',sans-serif; font-weight:700; font-size:1.15rem;}
+  .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--ferry-orange); box-shadow:0 0 0 4px rgba(241,100,46,0.25);}
+  .navlinks{display:flex; gap:26px; list-style:none; margin:0; padding:0;}
+  .navlinks a{color:var(--foam); text-decoration:none; font-size:0.92rem; font-weight:500; opacity:0.85; transition:opacity .2s;}
+  .navlinks a:hover{opacity:1;}
+  @media(max-width:640px){.navlinks{display:none;}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(circle at 85% 15%, rgba(255,178,56,0.16), transparent 45%),
+      linear-gradient(180deg, var(--harbour-deep) 0%, var(--harbour-ink) 100%);
+    color:var(--foam);
+    padding:96px 0 0;
+    overflow:hidden;
+  }
+  .hero-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:center;}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Space Mono',monospace; font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--sunrise-gold); border:1px solid rgba(255,178,56,0.4); padding:6px 12px; border-radius:999px;
+    margin-bottom:22px;
+  }
+  .hero h1{font-size:clamp(2.4rem, 5.6vw, 4.2rem); line-height:1.03; margin:0 0 20px;}
+  .hero h1 em{font-style:normal; color:var(--ferry-orange);}
+  .hero p.lede{font-size:1.08rem; line-height:1.6; color:rgba(244,250,249,0.82); max-width:520px; margin:0 0 30px;}
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:0.95rem;
+    padding:13px 24px; border-radius:10px; border:none; cursor:pointer; text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary{background:var(--ferry-orange); color:#fff; box-shadow:0 8px 20px -6px rgba(241,100,46,0.55);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{background:transparent; color:var(--foam); border:1px solid rgba(244,250,249,0.35);}
+  .btn-ghost:hover{border-color:var(--foam);}
+
+  /* windsock signature element */
+  .windsock-stage{position:relative; height:340px; display:flex; align-items:center; justify-content:center;}
+  .pole{position:absolute; bottom:14px; left:50%; width:6px; height:220px; background:linear-gradient(180deg,#4c7a94,#2a5977); border-radius:3px; transform:translateX(-50%);}
+  .pole::after{content:''; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); width:64px; height:14px; background:#1a3d52; border-radius:6px;}
+  .sock-wrap{position:absolute; top:26px; left:50%; transform-origin:0% 50%; animation:gust 3.4s ease-in-out infinite;}
+  @keyframes gust{
+    0%,100%{transform:rotate(8deg) translateX(-3px);}
+    50%{transform:rotate(28deg) translateX(-3px);}
+  }
+  .sock{
+    width:150px; height:46px;
+    background:repeating-linear-gradient(90deg, var(--ferry-orange) 0 18px, var(--foam) 18px 36px);
+    clip-path:polygon(0 0,100% 14%,92% 50%,100% 86%,0 100%);
+    border-radius:2px 10px 10px 2px;
+    box-shadow:0 6px 18px -4px rgba(0,0,0,0.35);
+  }
+  .gust-line{position:absolute; height:2px; background:rgba(244,250,249,0.35); border-radius:2px; animation:blow 2.6s linear infinite;}
+  @keyframes blow{0%{opacity:0; transform:translateX(-40px);} 20%{opacity:1;} 100%{opacity:0; transform:translateX(120px);}}
+  .g1{width:70px; top:70px; left:10px; animation-delay:.2s;}
+  .g2{width:50px; top:120px; left:0px; animation-delay:1.1s;}
+  .g3{width:90px; top:170px; left:-10px; animation-delay:1.9s;}
+
+  .wave-divider{display:block; width:100%; line-height:0;}
+  .wave-divider svg{width:100%; height:70px; display:block;}
+
+  /* ---------- STAT STRIP ---------- */
+  .stats{background:var(--strait-teal); color:var(--foam); padding:26px 0;}
+  .stats .wrap{display:flex; flex-wrap:wrap; gap:28px; justify-content:space-between;}
+  .stat{flex:1; min-width:140px; text-align:center;}
+  .stat b{display:block; font-family:'Fredoka',sans-serif; font-size:1.9rem; color:var(--sunrise-gold);}
+  .stat span{font-size:0.82rem; color:rgba(244,250,249,0.85);}
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section-head{max-width:640px; margin:0 auto 46px;}
+  .section-head .eyebrow{color:var(--ferry-orange); border-color:rgba(241,100,46,0.35);}
+  .section-head h2{font-size:clamp(1.8rem,3.4vw,2.5rem); margin:0 0 12px; color:var(--harbour-ink);}
+  .section-head p{color:#4b6270; line-height:1.6; margin:0; font-size:1.02rem;}
+  .center{text-align:center; margin-left:auto; margin-right:auto;}
+
+  /* ---------- FACTS ---------- */
+  .facts{padding:88px 0 70px;}
+  .facts-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  @media(max-width:900px){.facts-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:600px){.facts-grid{grid-template-columns:1fr;}}
+  .fact-card{
+    background:#fff; border-radius:16px; overflow:hidden; border:1px solid #E4EEEC;
+    box-shadow:0 1px 2px rgba(11,61,92,0.04);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .fact-card:hover{transform:translateY(-4px); box-shadow:0 16px 28px -14px rgba(11,61,92,0.25);}
+  .fact-media{position:relative; aspect-ratio:4/3; overflow:hidden; background:var(--foam-dim);}
+  .fact-media img{width:100%; height:100%; object-fit:cover;}
+  .fact-tag{
+    position:absolute; top:12px; left:12px; background:rgba(11,61,92,0.85); color:var(--sunrise-gold);
+    font-family:'Space Mono',monospace; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase;
+    padding:5px 10px; border-radius:999px;
+  }
+  .fact-body{padding:20px 20px 22px;}
+  .fact-body h3{margin:0 0 8px; font-size:1.12rem; color:var(--harbour-ink);}
+  .fact-body p{margin:0; font-size:0.92rem; line-height:1.55; color:#5a6f7a;}
+
+  /* ---------- GALLERY ---------- */
+  .gallery{padding:70px 0 90px; background:var(--foam-dim);}
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-auto-rows:150px;
+    gap:14px;
+  }
+  .gallery-grid figure{margin:0; position:relative; border-radius:12px; overflow:hidden; background:#cdd;}
+  .gallery-grid img{width:100%; height:100%; object-fit:cover; transition:transform .35s ease;}
+  .gallery-grid figure:hover img{transform:scale(1.06);}
+  .gallery-grid figcaption{
+    position:absolute; left:0; right:0; bottom:0;
+    background:linear-gradient(0deg, rgba(7,41,61,0.88), transparent);
+    color:var(--foam); font-size:0.76rem; padding:20px 12px 10px;
+  }
+  .g-a{grid-column:span 2; grid-row:span 2;}
+  .g-b{grid-column:span 2; grid-row:span 1;}
+  .g-c{grid-column:span 1; grid-row:span 1;}
+  .g-d{grid-column:span 1; grid-row:span 1;}
+  .g-e{grid-column:span 2; grid-row:span 1;}
+  @media(max-width:760px){
+    .gallery-grid{grid-template-columns:repeat(2,1fr); grid-auto-rows:130px;}
+    .g-a{grid-column:span 2; grid-row:span 2;}
+    .g-b,.g-e{grid-column:span 2; grid-row:span 1;}
+  }
+
+  /* ---------- QUIZ ---------- */
+  .quiz{padding:90px 0 100px; background:var(--harbour-ink); color:var(--foam);}
+  .quiz .section-head p{color:rgba(244,250,249,0.75);}
+  .quiz .section-head .eyebrow{color:var(--sunrise-gold); border-color:rgba(255,178,56,0.35);}
+  .quiz .section-head h2{color:var(--foam);}
+  .quiz-card{
+    max-width:640px; margin:0 auto; background:#0F4763; border:1px solid rgba(244,250,249,0.12);
+    border-radius:20px; padding:34px clamp(20px,4vw,44px); box-shadow:0 24px 50px -22px rgba(0,0,0,0.55);
+  }
+  .quiz-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;}
+  .progress-dots{display:flex; gap:7px;}
+  .progress-dots span{width:8px; height:8px; border-radius:50%; background:rgba(244,250,249,0.25);}
+  .progress-dots span.active{background:var(--ferry-orange);}
+  .progress-dots span.done{background:var(--sunrise-gold);}
+  .score-pill{font-family:'Space Mono',monospace; font-size:0.8rem; background:rgba(255,178,56,0.14); color:var(--sunrise-gold); padding:6px 12px; border-radius:999px;}
+  .q-text{font-family:'Fredoka',sans-serif; font-size:1.28rem; margin:0 0 22px; line-height:1.3;}
+  .choices{display:grid; gap:12px;}
+  .choice{
+    text-align:left; background:rgba(244,250,249,0.05); border:1px solid rgba(244,250,249,0.16); color:var(--foam);
+    padding:14px 16px; border-radius:12px; font-size:0.96rem; cursor:pointer; font-family:'Inter',sans-serif;
+    transition:background .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  .choice:hover{border-color:rgba(255,178,56,0.5);}
+  .choice.correct{background:rgba(70,180,120,0.22); border-color:#46B478;}
+  .choice.wrong{background:rgba(230,80,70,0.2); border-color:#E65046;}
+  .choice[disabled]{cursor:default;}
+  .q-feedback{min-height:22px; margin-top:16px; font-size:0.88rem; color:var(--sunrise-gold); font-family:'Space Mono',monospace;}
+  .q-actions{display:flex; justify-content:flex-end; margin-top:10px;}
+  .q-actions .btn{padding:10px 20px; font-size:0.88rem;}
+  .result-badge{text-align:center;}
+  .result-badge .big{font-family:'Fredoka',sans-serif; font-size:3rem; color:var(--sunrise-gold); margin:6px 0;}
+  .result-badge p{color:rgba(244,250,249,0.78); max-width:420px; margin:0 auto 22px;}
+  .hidden{display:none !important;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--harbour-deep); color:rgba(244,250,249,0.65); padding:34px 0; font-size:0.85rem;}
+  footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  footer strong{color:var(--foam);}
+
+  /* build-note ribbon for the student to see while editing, safe to delete */
+  .build-note{background:var(--sunrise-gold); color:var(--harbour-ink); font-family:'Space Mono',monospace; font-size:0.78rem; text-align:center; padding:8px 16px;}
+</style>
+</head>
+<body>
+
+<div class="build-note">🛠 starter template — swap in your own facts, photos &amp; quiz questions below</div>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span> Windy Wellington</div>
+    <ul class="navlinks">
+      <li><a href="#facts">Cool Facts</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Wellington, New Zealand · 41.29°S 174.78°E</span>
+        <h1>The capital city that<br>runs on <em>wind</em> &amp; harbour.</h1>
+        <p class="lede">A school project exploring Te Whanganui-a-Tara — New Zealand's compact, hilly, harbour-hugging capital. Scroll down for cool facts, real photos from our trip, and a quiz to test what you've learned.</p>
+        <div class="hero-ctas">
+          <a href="#facts" class="btn btn-primary">Explore the facts →</a>
+          <a href="#quiz" class="btn btn-ghost">Take the quiz</a>
+        </div>
+      </div>
+      <div class="windsock-stage">
+        <div class="gust-line g1"></div>
+        <div class="gust-line g2"></div>
+        <div class="gust-line g3"></div>
+        <div class="pole"></div>
+        <div class="sock-wrap"><div class="sock"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="wave-divider">
+    <svg viewBox="0 0 1200 70" preserveAspectRatio="none"><path d="M0,40 C200,80 400,0 600,30 C800,60 1000,10 1200,40 L1200,70 L0,70 Z" fill="#1C7293"></path></svg>
+  </div>
+</header>
+
+<!-- ================= STAT STRIP ================= -->
+<section class="stats">
+  <div class="wrap">
+    <div class="stat"><b>27 km/h</b><span>average wind speed</span></div>
+    <div class="stat"><b>1865</b><span>became NZ's capital</span></div>
+    <div class="stat"><b>212,700</b><span>people call it home</span></div>
+    <div class="stat"><b>1</b><span>fault line under the harbour</span></div>
+  </div>
+</section>
+
+<!-- ================= COOL FACTS ================= -->
+<section class="facts" id="facts">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Did you know?</span>
+      <h2>Cool facts about Wellington</h2>
+      <p>Nine bite-sized facts about the geography, wildlife and culture of New Zealand's windy capital — each paired with a photo from around the harbour and Kāpiti Coast.</p>
+    </div>
+
+    <div class="facts-grid">
+
+      <article class="fact-card">
+        <div class="fact-media"><span class="fact-tag">Geography</span><img src="images/waterfront-family.jpg" alt="Family standing by the Wellington waterfront"></div>
+        <div class="fact-body">
+          <h3>A harbour built by an earthquake</h3>
+          <p>Wellington Harbour, Te Whanganui-a-Tara, sits on the Wellington Fault. Centuries of movement along that fault helped carve the deep, sheltered harbour the city is built around.</p>
+        </div>
+      </article>
+
+      <article class="fact-card">
+        <div class="fact-media"><span class="fact-tag">Weather</span><img src="images/plane-sunset.jpg" alt="View from a plane wing at sunset flying into New Zealand"></div>
+        <div class="fact-body">
+          <h3>The world's windiest city</h3>
+          <p>Cook Strait squeezes wind between the North and South Islands like a funnel, giving Wellington the title of windiest city on Earth by average wind speed.</p>
+        </div>
+      </article>
+
+      <article class="fact-card">
+        <div class="fact-media"><span class="fact-tag">Wildlife</span><img src="images/starfish.jpg" alt="A starfish washed up on a New Zealand beach"></div>
+        <div class="fact-body">
+          <h3>Life along the shoreline</h3>
+          <p>The beaches around Wellington and the nearby Kāpiti Coast are full of sea life — starfish, shellfish and shore birds all turn up at low tide.</p>
+        </div>
+      </article>
+
+      <article class="fact-card">
+        <div class="fact-media"><span class="fact-tag">Conservation</span><img src="images/forest-bridge.jpg" alt="A boy on a swing bridge in a Wellington forest reserve"></div>
+        <div class="fact-body">
+          <h3>A fully-fenced sanctuary</h3>
+          <p>Nearby Zealandia was the world's first fully-fenced urban ecosanctuary, keeping out predators so native birds like kākā, tūī and kererū can thrive again.</p>
+        </div>
+      </article>
+
+      <article class="fact-card">
+        <div class="fact-media"><span class="fact-tag">Landmark</span><img src="images/lighthouse-playground.jpg" alt="Kids playing on a red and white lighthouse-shaped playground"></div>
+        <div class="fact-body">
+          <h3>A city that loves its coastline</h3>
+          <p>Playgrounds, promenades and picnic spots line Wellington's waterfront — even the play equipment takes inspiration from the lighthouses guarding the harbour entrance.</p>
+        </div>
+      </article>
+
+      <article class="fact-card">
+        <div class="fact-media"><span class="fact-tag">Culture</span><img src="images/hot-chocolate.jpg" alt="A decorated hot chocolate at a Wellington cafe"></div>
+        <div class="fact-body">
+          <h3>More cafés per person than New York</h3>
+          <p>Wellington is famous for its café culture — locals say it has more cafés and restaurants per capita than any other city in the world.</p>
+        </div>
+      </article>
+
+      <article class="fact-card">
+        <div class="fact-media"><span class="fact-tag">Neighbours</span><img src="images/kapiti-sunset.jpg" alt="Sunset over Kapiti Island seen from the coast"></div>
+        <div class="fact-body">
+          <h3>An island on the doorstep</h3>
+          <p>Just north of the city, Kāpiti Island is a predator-free nature reserve — a striking silhouette on the horizon from the region's west coast beaches.</p>
+        </div>
+      </article>
+
+      <article class="fact-card">
+        <div class="fact-media"><span class="fact-tag">Wildlife</span><img src="images/kapiti-dog.jpg" alt="A boy and dog playing on the beach with Kapiti Island in the background"></div>
+        <div class="fact-body">
+          <h3>Kāpiti Island up close</h3>
+          <p>On a clear day you can see Kāpiti Island from the beach — it's one of New Zealand's most important offshore sanctuaries for native birds.</p>
+        </div>
+      </article>
+
+      <article class="fact-card">
+        <div class="fact-media"><span class="fact-tag">Government</span><img src="images/waterfront-boys.jpg" alt="Boys standing near the Wellington waterfront buildings"></div>
+        <div class="fact-body">
+          <h3>The Beehive</h3>
+          <p>Wellington is home to the Beehive, the round, tiered Executive Wing of New Zealand's Parliament Buildings — one of the country's most recognisable landmarks.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Field trip</span>
+      <h2>Photos from around the harbour</h2>
+      <p>A few shots from our own trip around Wellington and the Kāpiti Coast — replace these with your own photos as you go.</p>
+    </div>
+    <div class="gallery-grid">
+      <figure class="g-a"><img src="images/waterfront-family.jpg" alt="Family on Wellington waterfront"><figcaption>Wellington waterfront</figcaption></figure>
+      <figure class="g-b"><img src="images/plane-sunset.jpg" alt="Plane wing at sunset"><figcaption>Flying in over the coast</figcaption></figure>
+      <figure class="g-c"><img src="images/lighthouse-playground.jpg" alt="Lighthouse playground"><figcaption>Waterfront playground</figcaption></figure>
+      <figure class="g-d"><img src="images/starfish.jpg" alt="Starfish on the beach"><figcaption>Low tide finds</figcaption></figure>
+      <figure class="g-e"><img src="images/kapiti-sunset.jpg" alt="Kapiti Island sunset"><figcaption>Kāpiti Island at dusk</figcaption></figure>
+      <figure class="g-c"><img src="images/hot-chocolate.jpg" alt="Cafe hot chocolate"><figcaption>Café culture</figcaption></figure>
+      <figure class="g-d"><img src="images/forest-bridge.jpg" alt="Forest swing bridge"><figcaption>Zealandia trails</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section class="quiz" id="quiz">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Test yourself</span>
+      <h2>Wellington quiz</h2>
+      <p>Six questions built from the facts above. Answer them all to get your wind rating.</p>
+    </div>
+
+    <div class="quiz-card">
+      <div class="quiz-top">
+        <div class="progress-dots" id="progressDots"></div>
+        <div class="score-pill" id="scorePill">SCORE 0/6</div>
+      </div>
+
+      <div id="quizBody"></div>
+
+      <div id="resultBody" class="result-badge hidden">
+        <span class="eyebrow" style="border-color:rgba(255,178,56,.4)">Final score</span>
+        <div class="big" id="finalScore">0/6</div>
+        <p id="finalMessage">Nice work exploring Wellington!</p>
+        <button class="btn btn-primary" onclick="restartQuiz()">Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Windy Wellington</strong> — a school project.</div>
+    <div>Built with 🧡 for Te Whanganui-a-Tara.</div>
+  </div>
+</footer>
+
+<script>
+  // ---------------- QUIZ DATA ----------------
+  // Edit / add questions here — each needs a question, 4 choices, and the index of the correct one.
+  const QUESTIONS = [
+    {
+      q: "Why is Wellington known as the windiest city in the world?",
+      choices: ["It sits on top of a mountain", "Cook Strait funnels wind between the islands", "It has no trees to block the wind", "It's next to a desert"],
+      correct: 1,
+    },
+    {
+      q: "What is the Māori name for Wellington Harbour?",
+      choices: ["Te Whanganui-a-Tara", "Te Waipounamu", "Aotearoa", "Te Ika-a-Māui"],
+      correct: 0,
+    },
+    {
+      q: "What makes Zealandia special?",
+      choices: ["It's the biggest zoo in NZ", "It's the world's first fully-fenced urban ecosanctuary", "It's an island offshore", "It's a museum of native birds"],
+      correct: 1,
+    },
+    {
+      q: "What is the Beehive?",
+      choices: ["A café chain", "A type of ferry", "The Executive Wing of NZ's Parliament", "A hill above the harbour"],
+      correct: 2,
+    },
+    {
+      q: "Wellington is famous for having a lot of...",
+      choices: ["Cafés per person", "Skyscrapers", "Deserts", "Volcanoes"],
+      correct: 0,
+    },
+    {
+      q: "Which nature reserve island can be seen from the Kāpiti Coast?",
+      choices: ["Stewart Island", "Kāpiti Island", "Great Barrier Island", "White Island"],
+      correct: 1,
+    },
+  ];
+
+  let current = 0;
+  let score = 0;
+  let answered = false;
+
+  const quizBody = document.getElementById('quizBody');
+  const resultBody = document.getElementById('resultBody');
+  const progressDots = document.getElementById('progressDots');
+  const scorePill = document.getElementById('scorePill');
+
+  function buildDots(){
+    progressDots.innerHTML = QUESTIONS.map((_, i) => {
+      let cls = '';
+      if(i < current) cls = 'done';
+      if(i === current) cls = 'active';
+      return `<span class="${cls}"></span>`;
+    }).join('');
+  }
+
+  function renderQuestion(){
+    answered = false;
+    const item = QUESTIONS[current];
+    buildDots();
+    scorePill.textContent = `SCORE ${score}/${QUESTIONS.length}`;
+
+    quizBody.innerHTML = `
+      <p class="q-text">${current + 1}. ${item.q}</p>
+      <div class="choices">
+        ${item.choices.map((c, i) => `<button class="choice" data-i="${i}">${c}</button>`).join('')}
+      </div>
+      <div class="q-feedback" id="feedback"></div>
+      <div class="q-actions">
+        <button class="btn btn-primary" id="nextBtn" disabled>Next →</button>
+      </div>
+    `;
+
+    quizBody.querySelectorAll('.choice').forEach(btn => {
+      btn.addEventListener('click', () => selectChoice(parseInt(btn.dataset.i)));
+    });
+    document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+  }
+
+  function selectChoice(i){
+    if(answered) return;
+    answered = true;
+    const item = QUESTIONS[current];
+    const buttons = quizBody.querySelectorAll('.choice');
+    buttons.forEach(b => b.setAttribute('disabled', 'true'));
+
+    buttons[item.correct].classList.add('correct');
+    const feedback = document.getElementById('feedback');
+
+    if(i === item.correct){
+      score++;
+      feedback.textContent = "✓ Correct!";
+    } else {
+      buttons[i].classList.add('wrong');
+      feedback.textContent = "✕ Not quite — correct answer highlighted.";
+    }
+    scorePill.textContent = `SCORE ${score}/${QUESTIONS.length}`;
+    document.getElementById('nextBtn').removeAttribute('disabled');
+  }
+
+  function nextQuestion(){
+    current++;
+    if(current >= QUESTIONS.length){
+      showResults();
+    } else {
+      renderQuestion();
+    }
+  }
+
+  function showResults(){
+    quizBody.classList.add('hidden');
+    resultBody.classList.remove('hidden');
+    buildDots();
+    document.getElementById('finalScore').textContent = `${score}/${QUESTIONS.length}`;
+
+    const msg = document.getElementById('finalMessage');
+    if(score === QUESTIONS.length){
+      msg.textContent = "Gale-force knowledge! You know Wellington inside out. 🌬️";
+    } else if(score >= QUESTIONS.length / 2){
+      msg.textContent = "Solid breeze! You know your way around the harbour.";
+    } else {
+      msg.textContent = "A bit of a calm day — scroll back up and try the facts again!";
+    }
+  }
+
+  function restartQuiz(){
+    current = 0; score = 0;
+    resultBody.classList.add('hidden');
+    quizBody.classList.remove('hidden');
+    renderQuestion();
+  }
+
+  renderQuestion();
+</script>
+
+</body>
+</html>
